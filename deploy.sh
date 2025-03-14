@@ -23,7 +23,6 @@ npm install
 chmod 644 privatekey.pem
 chmod 644 server.crt
 
-cd ..
 
 # If the environment variables are set, write them into the respective files
 #echo $PRIVATE_KEY > privatekey.pem
