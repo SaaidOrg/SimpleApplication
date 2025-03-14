@@ -1,6 +1,6 @@
-# Devops Example Project
+# Devops Example Project 
 
-# Project Dependencies
+# Project Dependencies 
 1. Node.js
 2. Truffle
 ...
