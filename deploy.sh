@@ -9,24 +9,15 @@ sudo npm install -g pm2
 # Stop any existing process of SimpleApp
 pm2 stop SimpleApp
 
-# Copy the private and server keys from the root to the application directory
-cp /privatekey.pem SimpleApplication/privatekey.pem
-cp /server.crt SimpleApplication/server.crt
+# Copy the private and server keys from the ubuntu user's home directory
+cp /home/ubuntu/privatekey.pem SimpleApplication/privatekey.pem
+cp /home/ubuntu/server.crt SimpleApplication/server.crt
 
 # Navigate to the application directory
 cd SimpleApplication/
 
 # Install the required dependencies for the application
 npm install
-
-# Set appropriate permissions for the copied key files to make them readable
-chmod 644 privatekey.pem
-chmod 644 server.crt
-
-
-# If the environment variables are set, write them into the respective files
-#echo $PRIVATE_KEY > privatekey.pem
-#echo $SERVER > server.crt
 
 # Start the application using PM2
 pm2 start ./bin/www --name SimpleApp
