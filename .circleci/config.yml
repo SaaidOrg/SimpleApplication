@@ -13,7 +13,7 @@ workflows:
           filters:
             branches:
               only:
-                - main 
+                - main
           requires:
             - build
 
@@ -25,12 +25,12 @@ jobs:
     steps:
       - checkout
       - run:
-          name: update-npm
-          command: 'sudo npm install -g npm@5'
+          name: Update npm
+          command: npm install -g npm@5
       - restore_cache:
           key: dependency-cache-{{ checksum "package-lock.json" }}
       - run:
-          name: install-npm
+          name: Install dependencies
           command: npm install
       - save_cache:
           key: dependency-cache-{{ checksum "package-lock.json" }}
@@ -43,6 +43,13 @@ jobs:
     steps:
       - run:
           name: deploy-application
-          command: ssh -o StrictHostKeyChecking=no $EC2_USERNAME@$EC2_PUBLIC_DNS "rm -rf SimpleApplication/; git clone https://github.com/SaaidOrg/SimpleApplication.git; source SimpleApplication/deploy.sh"
+          command: |
+            ssh -o StrictHostKeyChecking=no $EC2_USERNAME@$EC2_PUBLIC_DNS << 'EOF'
+              rm -rf SimpleApplication/
+              git clone https://github.com/SaaidOrg/SimpleApplication.git
+              cd SimpleApplication
+              chmod +x deploy.sh
+              bash deploy.sh
+            EOF
 
 
