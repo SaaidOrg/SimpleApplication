@@ -8,5 +8,5 @@ cp /home/ubuntu/server.crt SimpleApplication/server.crt
 cd SimpleApplication/
 npm install
 
-pm2 start ./bin/www --name SimpleApp1
+pm2 start ./bin/www --name SimpleApp
       
