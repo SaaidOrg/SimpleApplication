@@ -1,27 +1,42 @@
 #!/usr/bin/env bash
 
-# Ensure that the system is updated and the necessary packages are installed
-sudo apt update && sudo apt install -y nodejs npm
+# Update package lists
+sudo apt update 
 
-# Install PM2 globally
+# Install Node.js and npm separately to avoid conflicts
+sudo apt install -y nodejs
+sudo apt install -y npm --fix-broken
+
+# Install pm2 globally
 sudo npm install -g pm2
 
-# Stop any existing process of SimpleApp
-pm2 stop SimpleApp
+# Stop SimpleApp only if it is running
+pm2 list | grep -q "SimpleApp" && pm2 stop SimpleApp
 
-# Copy the private and server keys from the ubuntu user's home directory
-cp /home/ubuntu/privatekey.pem SimpleApplication/privatekey.pem
-cp /home/ubuntu/server.crt SimpleApplication/server.crt
+# Ensure private key and certificate exist before copying
+if [ -f /home/ubuntu/privatekey.pem ]; then
+    cp /home/ubuntu/privatekey.pem SimpleApplication/privatekey.pem
+    chmod 600 SimpleApplication/privatekey.pem
+else
+    echo "Error: privatekey.pem not found!"
+fi
 
-# Navigate to the application directory
+if [ -f /home/ubuntu/server.crt ]; then
+    cp /home/ubuntu/server.crt SimpleApplication/server.crt
+    chmod 600 SimpleApplication/server.crt
+else
+    echo "Error: server.crt not found!"
+fi
+
+# Clone or update repository
+if [ ! -d "SimpleApplication" ]; then
+    git clone https://github.com/SaaidOrg/SimpleApplication.git
+fi
+
 cd SimpleApplication/
 
-# Install the required dependencies for the application
+# Install dependencies
 npm install
-
-# Set appropriate permissions for the copied key files to make them readable
-chmod 644 privatekey.pem
-chmod 644 server.crt
 
 # Start the application using PM2
 pm2 start ./bin/www --name SimpleApp
