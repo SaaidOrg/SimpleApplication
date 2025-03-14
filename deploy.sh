@@ -24,8 +24,8 @@ chmod 644 privatekey.pem
 chmod 644 server.crt
 
 # If the environment variables are set, write them into the respective files
-echo $PRIVATE_KEY > privatekey.pem
-echo $SERVER > server.crt
+#echo $PRIVATE_KEY > privatekey.pem
+#echo $SERVER > server.crt
 
 # Start the application using PM2
 pm2 start ./bin/www --name SimpleApp
